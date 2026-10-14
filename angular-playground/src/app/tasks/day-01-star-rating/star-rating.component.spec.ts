@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { StarRatingComponent } from './star-rating.component';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 describe('StarRatingComponent', () => {
   let fixture: ComponentFixture<StarRatingComponent>;
@@ -32,7 +33,7 @@ describe('StarRatingComponent', () => {
   });
 
   it('should emit the clicked star value', () => {
-    spyOn(component.ratingChange, 'emit');
+    vi.spyOn(component.ratingChange, 'emit');
     const stars = fixture.nativeElement.querySelectorAll('.star');
     (stars[2] as HTMLElement).click(); // click the 3rd star
     fixture.detectChanges();
@@ -41,7 +42,7 @@ describe('StarRatingComponent', () => {
   });
 
   it('should clear the rating when clicking the selected star again', () => {
-    spyOn(component.ratingChange, 'emit');
+    vi.spyOn(component.ratingChange, 'emit');
     const stars = fixture.nativeElement.querySelectorAll('.star');
     (stars[3] as HTMLElement).click();
     (stars[3] as HTMLElement).click(); // click again to clear
@@ -75,7 +76,7 @@ describe('StarRatingComponent', () => {
   it('should ignore clicks and keys when readonly', () => {
     fixture.componentRef.setInput('readOnly', true);
     fixture.detectChanges();
-    spyOn(component.ratingChange, 'emit');
+    vi.spyOn(component.ratingChange, 'emit');
 
     const stars = fixture.nativeElement.querySelectorAll('.star');
     (stars[4] as HTMLElement).click();
