@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { StarRatingComponent } from './star-rating.component';
-import { OutputEmitterRef } from '@angular/core';
 
 describe('StarRatingComponent', () => {
   let fixture: ComponentFixture<StarRatingComponent>;
@@ -95,7 +94,4 @@ describe('StarRatingComponent', () => {
     expect(host.getAttribute('aria-valuemax')).toBe('5');
   });
 });
-function spyOn(ratingChange: OutputEmitterRef<number>, arg1: string) {
-  throw new Error('Function not implemented.');
-}
 
