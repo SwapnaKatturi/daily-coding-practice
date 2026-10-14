@@ -1,0 +1,8 @@
+<div class="demo">
+  <app-star-rating [rating]="rating()" [maxStars]="5" (ratingChange)="onRatingChange($event)"></app-star-rating>
+  <span class="rating-text"> You rated {{rating()}} of 5</span>
+</div>
+
+<div class="demo">
+  <app-star-rating [rating]='4' [readOnly]="true" ></app-star-rating>
+</div>
