@@ -38,7 +38,7 @@ function validate(values: ContactFormvalues): FormErrors {
     if (!values.message.trim()) {
         errors.message = 'Message is required';
     } else if (values.message.trim().length < 10) {
-        errors.message = 'Message must be atleast 10 characters';
+        errors.message = 'Message must be at least 10 characters';
     }
     return errors;
 }
@@ -58,7 +58,7 @@ export default function ContactForm({ onSubmit }: ContactFormProps) {
     const fieldRefs: Record<FieldName, React.RefObject<HTMLInputElement | HTMLTextAreaElement | null>> = {
         name: useRef<HTMLInputElement>(null),
         email: useRef<HTMLInputElement>(null),
-        message: useRef<HTMLInputElement>(null)
+        message: useRef<HTMLTextAreaElement>(null)
     }
 
     function handleChange(field: FieldName) {
@@ -197,7 +197,7 @@ export default function ContactForm({ onSubmit }: ContactFormProps) {
                     aria-describedby={errors.message ? 'message-error' : undefined}
                 />
                 {errors.message && (
-                    <p style={{ color: '#c00', margin: '4px 0 0' }}>
+                    <p id='message-error' style={{ color: '#c00', margin: '4px 0 0' }}>
                         {errors.message}
                     </p>
                 )}
