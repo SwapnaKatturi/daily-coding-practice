@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef, useEffect, useState } from "react";
 import type { ChangeEvent, FormEvent } from "react";
 
 type FieldName = 'name' | 'email' | 'message';
@@ -90,9 +90,6 @@ export default function ContactForm({ onSubmit }: ContactFormProps) {
 
         if (errorFields.length > 0) {
             setSuccessMessage('');
-            requestAnimationFrame(() => {
-                summaryRef.current?.focus();
-            })
             return;
         }
 
@@ -106,6 +103,12 @@ export default function ContactForm({ onSubmit }: ContactFormProps) {
 
     const errorFields = Object.keys(errors) as FieldName[];
     const hasErrors = submitAttempted && errorFields.length > 0;
+
+    useEffect(() => {
+        if (hasErrors) {
+            summaryRef.current?.focus();
+        }
+    }, [hasErrors]);
 
     function jumpToField(field: FieldName) {
         return (e: React.MouseEvent<HTMLAnchorElement>) => {

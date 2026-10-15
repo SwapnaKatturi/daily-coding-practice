@@ -20,9 +20,9 @@ describe('ContactForm', () => {
         expect(summary).toBeInTheDocument();
         expect(screen.getByText(/there are 3 problems/i)).toBeInTheDocument();
 
-        expect(screen.getByText(/name is required/i)).toBeInTheDocument();
-        expect(screen.getByText(/email is required/i)).toBeInTheDocument();
-        expect(screen.getByText(/message is required/i)).toBeInTheDocument();
+        expect(screen.getByText('Name is required')).toBeInTheDocument();
+        expect(screen.getByText('Email is required')).toBeInTheDocument();
+        expect(screen.getByText('Message is required')).toBeInTheDocument();
 
         expect(screen.getByRole('textbox', { name: /name/i })).toHaveAttribute(
             'aria-invalid',
