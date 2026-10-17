@@ -1,8 +1,40 @@
-<div class="demo">
-  <app-star-rating [rating]="rating()" [maxStars]="5" (ratingChange)="onRatingChange($event)"></app-star-rating>
-  <span class="rating-text"> You rated {{rating()}} of 5</span>
-</div>
+<h1>Daily Coding Practice</h1>
 
-<div class="demo">
-  <app-star-rating [rating]='4' [readOnly]="true" ></app-star-rating>
-</div>
+<section class="panel">
+  <h2>
+    <button
+      type="button"
+      id="panel-star-btn"
+      aria-controls="panel-star"
+      [attr.aria-expanded]="isOpen('star')"
+      (click)="togglePanel('star')"
+    >
+      Star Demo
+    </button>
+  </h2>
+  <div id="panel-star" role="region" aria-labelledby="panel-star-btn" [hidden]="!isOpen('star')">
+    <app-star-demo />
+  </div>
+</section>
+
+<section class="panel">
+  <h2>
+    <button
+      type="button"
+      id="panel-search-btn"
+      aria-controls="panel-search"
+      [attr.aria-expanded]="isOpen('search')"
+      (click)="togglePanel('search')"
+    >
+      Search Page
+    </button>
+  </h2>
+  <div
+    id="panel-search"
+    role="region"
+    aria-labelledby="panel-search-btn"
+    [hidden]="!isOpen('search')"
+  >
+    <app-search-page />
+  </div>
+</section>

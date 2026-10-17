@@ -1,0 +1,46 @@
+.typeahead {
+    position: relative;
+    width: 260px;
+}
+
+input {
+    width: 100%;
+    padding: 8px;
+    font-size: 1rem;
+}
+
+ul {
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin: 4px 0 0;
+    padding: 0;
+    list-style: none;
+    background: #fff;
+    border: 1px solid #ccc;
+    max-height: 180px;
+    overflow: auto;
+}
+
+li {
+    padding: 8px;
+    cursor: pointer;
+}
+
+li.active {
+    background: #e0e7ff;
+}
+
+li.hint {
+    color: #666;
+    cursor: default;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+}

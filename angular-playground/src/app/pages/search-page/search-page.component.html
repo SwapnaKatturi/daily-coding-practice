@@ -1,0 +1,9 @@
+<h2>Fruit Search</h2>
+
+<app-typeahead (selectionChange)="onSelection($event)"></app-typeahead>
+
+@if (selected()) {
+  <p>
+    You selected: <strong>{{ selected() }}</strong>
+  </p>
+}

@@ -1,19 +1,25 @@
 import { Component, signal } from '@angular/core';
-import { StarRatingComponent } from './tasks/day-01-star-rating/star-rating.component';
+import { StarDemoComponent } from './pages/star-demo/star-demo.component';
+import { SearchPageComponent } from './pages/search-page/search-page.component';
+
+type PanelName = 'star' | 'search';
 
 @Component({
-  imports: [StarRatingComponent],
+  imports: [StarDemoComponent, SearchPageComponent],
   standalone: true,
   selector: 'app-root',
   styleUrl: './app.css',
   templateUrl: './app.html',
 })
 export class App {
-  rating = signal(3);
+  // Which panel is open; null = all collapsed. Single-open accordion.
+  openPanel = signal<PanelName | null>('star');
 
-  onRatingChange(newRating: number): void {
-    this.rating.set(newRating);
+  togglePanel(name: PanelName): void {
+    this.openPanel.set(this.openPanel() === name ? null : name);
   }
 
-  protected readonly title = signal('star-rating-demo');
+  isOpen(name: PanelName): boolean {
+    return this.openPanel() === name;
+  }
 }
