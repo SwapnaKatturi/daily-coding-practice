@@ -1,28 +1,32 @@
-import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { delay, of } from 'rxjs';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { TypeaheadComponent } from './typeahead.component';
 import { FruitService } from './fruit.service';
 
 describe('TypeaheadComponent', () => {
     let fixture: ComponentFixture<TypeaheadComponent>;
     let component: TypeaheadComponent;
-    let fruitService: jasmine.SpyObj<FruitService>;
+    let searchSpy: ReturnType<typeof vi.fn>;
 
     beforeEach(async () => {
-        const spy = jasmine.createSpyObj('FruitService', ['search']);
+        searchSpy = vi.fn((term: string) =>
+            of(['Apple', 'Apricot'].filter(f => f.toLowerCase().includes(term.toLowerCase()))).pipe(delay(400))
+        );
+
         await TestBed.configureTestingModule({
             imports: [TypeaheadComponent],
-            providers: [{ provide: FruitService, useValue: spy }],
+            providers: [{ provide: FruitService, useValue: { search: searchSpy } }],
         }).compileComponents();
 
         fixture = TestBed.createComponent(TypeaheadComponent);
         component = fixture.componentInstance;
-        fruitService = TestBed.inject(FruitService) as jasmine.SpyObj<FruitService>;
-        fruitService.search.and.callFake((term: string) =>
-            of(['Apple', 'Apricot'].filter(f => f.toLowerCase().includes(term.toLowerCase())))
-                .pipe(delay(400))
-        );
         fixture.detectChanges();
+        vi.useFakeTimers();
+    });
+
+    afterEach(() => {
+        vi.useRealTimers();
     });
 
     function typeText(text: string) {
@@ -36,35 +40,35 @@ describe('TypeaheadComponent', () => {
         expect(component).toBeTruthy();
     });
 
-    it('does not call the API before 300ms debounce; calls it after', fakeAsync(() => {
+    it('does not call the API before 300ms debounce; calls it after', () => {
         typeText('ap');
-        tick(200);
-        expect(fruitService.search).not.toHaveBeenCalled();
-        tick(100); // 300ms total → debounce fires, API call starts (400ms delay)
-        expect(fruitService.search).toHaveBeenCalledTimes(1);
-        expect(fruitService.search).toHaveBeenCalledWith('ap');
-        tick(400); // let the fake API respond
+        vi.advanceTimersByTime(200);
+        expect(searchSpy).not.toHaveBeenCalled();
+        vi.advanceTimersByTime(100); // 300ms total → debounce fires, API call starts (400ms delay)
+        expect(searchSpy).toHaveBeenCalledTimes(1);
+        expect(searchSpy).toHaveBeenCalledWith('ap');
+        vi.advanceTimersByTime(400); // let the fake API respond
         fixture.detectChanges();
         expect(component.suggestions()).toEqual(['Apple', 'Apricot']);
-        expect(component.isOpen()).toBeTrue();
-    }));
+        expect(component.isOpen()).toBe(true);
+    });
 
-    it('calls the API only once when typing the same term twice', fakeAsync(() => {
+    it('calls the API only once when typing the same term twice', () => {
         typeText('ap');
-        tick(300);
-        tick(400);
+        vi.advanceTimersByTime(300);
+        vi.advanceTimersByTime(400);
         typeText('ap'); // identical term → distinctUntilChanged drops it
-        tick(300);
-        tick(400);
-        expect(fruitService.search).toHaveBeenCalledTimes(1);
-    }));
+        vi.advanceTimersByTime(300);
+        vi.advanceTimersByTime(400);
+        expect(searchSpy).toHaveBeenCalledTimes(1);
+    });
 
-    it('selects the active option with Enter', fakeAsync(() => {
+    it('selects the active option with Enter', () => {
         let selected: string | undefined;
         component.selectionChange.subscribe(v => (selected = v));
         typeText('ap');
-        tick(300);
-        tick(400);
+        vi.advanceTimersByTime(300);
+        vi.advanceTimersByTime(400);
         fixture.detectChanges();
         const input: HTMLInputElement = fixture.nativeElement.querySelector('input');
         input.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
@@ -73,6 +77,6 @@ describe('TypeaheadComponent', () => {
         fixture.detectChanges();
         expect(selected).toBe('Apple');
         expect(input.value).toBe('Apple');
-        expect(component.isOpen()).toBeFalse();
-    }));
+        expect(component.isOpen()).toBe(false);
+    });
 });

@@ -1,5 +1,5 @@
 import { Component, signal } from '@angular/core';
-import { TypeaheadComponent } from '../../tasks/day-03-typeahead/typeahead.component';
+import { TypeaheadComponent } from '../../tasks/day-03-accessible-typeahead-search/typeahead.component';
 
 @Component({
     selector: 'app-search-page',
